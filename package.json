@@ -1,0 +1,24 @@
+{
+  "name": "midterm",
+  "version": "1.0.0",
+  "description": "ebay api app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cpham19/CS4220.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cpham19/CS4220/issues"
+  },
+  "homepage": "https://github.com/cpham19/CS4220#readme",
+  "dependencies": {
+    "api": "file:api",
+    "inquirer": "^5.1.0",
+    "yargs": "^11.0.0"
+  }
+}
