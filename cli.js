@@ -69,5 +69,10 @@ const
         },
         handler: (argv) => {app.findItemsIneBayStores(argv.query)}
     })
+    .command({
+        command: 'start',
+        desc: 'start the api',
+        handler: () => { app.start()}
+    })
     .help('help')
     .argv

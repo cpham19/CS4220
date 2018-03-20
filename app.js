@@ -83,8 +83,84 @@ let findItemsIneBayStoresTable = new Table({
 
 //********************* */
 
- 
 
+const mainPrompt = () => {
+	return inquirer.prompt([{
+		type: 'list',
+		message: 'Select an option below.',
+		name: 'feature',
+        choices: ['Find Completed Items', 'Find Items Advanced',
+                  'Find Items By Category', 'Find Items By Keywords',
+                  'Find Items By Product', 'Find Items In eBay Stores'],        
+                  // implement choices array - look at the inquirer documentation,
+	}])
+}
+
+const promptForCompletedItems = () => {
+	return inquirer.prompt([{
+		type: 'input',
+		message: 'Type your keywords.',
+        name: 'keywords',
+        default: function() {
+            return 'Nintendo 64';
+        }
+	}])
+}
+
+const promptForItemsAdvanced = () => {
+	return inquirer.prompt([{
+		type: 'input',
+		message: 'Type your keywords.',
+        name: 'keywords',
+        default: function() {
+            return 'Pokemon';
+        }
+	}])
+}
+
+const promptForItemsByCategory = () => {
+	return inquirer.prompt([{
+		type: 'input',
+		message: 'Type your category id #.',
+        name: 'id',
+        default: function() {
+            return '625';
+        }
+	}])
+}
+
+const promptForItemsByKeywords = () => {
+	return inquirer.prompt([{
+		type: 'input',
+		message: 'Type your keywords.',
+        name: 'keywords',
+        default: function() {
+            return 'GTX 1080';
+        }
+	}])
+}
+
+const promptForItemsByProduct = () => {
+	return inquirer.prompt([{
+		type: 'input',
+		message: 'Type your product id.',
+        name: 'productId',
+        default: function() {
+            return '978-0316015844';
+        }
+	}])
+}
+
+const promptForItemsIneBayStores = () => {
+	return inquirer.prompt([{
+		type: 'input',
+		message: 'Type your store name.',
+        name: 'storeName',
+        default: function() {
+            return 'OfficialBestBuy';
+        }
+	}])
+}
 
 const findCompletedItems = (query) => {
     api.findCompletedItems(query).then(res => {
@@ -238,7 +314,46 @@ const findItemsIneBayStores = (query) => {
     })
 }
 
+const selectedOption = (answer) => {
+    if (answer === 'Find Completed Items') {
+        promptForCompletedItems().then(answer => {
+            findCompletedItems(answer.keywords)
+        })
+    }
+    else if (answer === 'Find Items Advanced') {
+        promptForItemsAdvanced().then(answer => {
+            findItemsAdvanced(answer.keywords)
+        })
+    }
+    else if (answer === 'Find Items By Category') {
+        promptForItemsByCategory().then(answer => {
+            findItemsByCategory(answer.id)
+        })
+    }
+    else if (answer === 'Find Items By Keywords') {
+        promptForItemsByKeywords().then(answer => {
+            findItemsByKeywords(answer.keywords)
+        })
+    }
+    else if (answer === 'Find Items By Product') {
+        promptForItemsByProduct().then(answer => {
+            findItemsByProduct(answer.productId)
+        })
+    }
+    else if (answer === 'Find Items In eBay Stores') {
+        promptForItemsIneBayStores().then(answer => {
+            findItemsIneBayStores(answer.storeName)
+        })
+    }
+}
+
+const start = () => {
+    mainPrompt().then(answer => {
+        selectedOption(answer.feature)
+    });
+}
+
 module.exports = {
     findCompletedItems, findItemsAdvanced, findItemsByCategory, 
-    findItemsByKeywords, findItemsByProduct, findItemsIneBayStores
+    findItemsByKeywords, findItemsByProduct, findItemsIneBayStores, start
 }
