@@ -18,6 +18,8 @@
   "homepage": "https://github.com/cpham19/CS4220#readme",
   "dependencies": {
     "api": "file:api",
+    "cli-table": "^0.3.1",
+    "colors": "^1.2.1",
     "inquirer": "^5.1.0",
     "yargs": "^11.0.0"
   }
