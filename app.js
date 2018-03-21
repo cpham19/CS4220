@@ -284,7 +284,7 @@ const findItemsByProduct = (query) => {
         //console.log(searchResults)
 
         let counter = 1
-        console.log("Items using product id type '" + query.productIdType + "Product ID #'" + query.productId + "'")
+        console.log("Items using product id type '" + query.productIdType + "' and Product ID #'" + query.productId + "'")
         console.log('---------------------------------')
         searchResults.forEach(obj => {
             let objString = obj.title.toString()
