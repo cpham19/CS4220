@@ -7,8 +7,8 @@ const APP_ID = 'CalvinPh-MyApplic-PRD-9e44c9784-d9928e5d'
 // Example link
 //http://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsAdvanced&SERVICE-VERSION=1.0.0&SECURITY-APPNAME=CalvinPh-MyApplic-PRD-9e44c9784-d9928e5d&RESPONSE-DATA-FORMAT=JSON&REST-PAYLOAD&keywords=harry%20potter%20phoenix
 
-const _fetch = (param) => {
-    return superagent.get(`${config.url}${param}`)
+const _fetchFindingApi = (param) => {
+    return superagent.get(`${config.findingUrl}${param}`)
         .then(response => response)
         .catch(error => error.response)
 }
@@ -27,7 +27,7 @@ exports.findCompletedItems = (query) => {
     const keywords = query.split(" ")
     param += "&keywords="
     param += keywords.join("%20")
-    return _fetch(param)
+    return _fetchFindingApi(param)
 }
 
 // example command: node cli.js findItemsAdvanced -q 'Pokemon'
@@ -41,10 +41,12 @@ exports.findItemsAdvanced = (query) => {
     param += "&RESPONSE-DATA-FORMAT=JSON"
     param += "&REST-PAYLOAD"
     param += '&paginationInput.entriesPerPage=' + numberOfItemsOnPage
-    const keywords = query.split(" ")
+    const keywords = query.keywords.split(" ")
     param += "&keywords="
     param += keywords.join("%20")
-    return _fetch(param)
+    param += "&categoryId=" + query.id
+    param += "&descriptionSearch=true"
+    return _fetchFindingApi(param)
 }
 
 // example command: node cli.js findItemByCategory -q 626
@@ -63,7 +65,7 @@ exports.findItemsByCategory = (query) => {
     param += "&REST-PAYLOAD"
     param += '&paginationInput.entriesPerPage=' + numberOfItemsOnPage
     param += "&categoryId=" + query
-    return _fetch(param)
+    return _fetchFindingApi(param)
 }
 
 // example command: node cli.js findItemsByKeywords -q 'GTX 1080'
@@ -80,7 +82,7 @@ exports.findItemsByKeywords = (query) => {
     const keywords = query.split(" ")
     param += "&keywords="
     param += keywords.join("%20")
-    return _fetch(param)
+    return _fetchFindingApi(param)
 }
 
 // example command: node cli.js findItemsByProduct -q 978-0316015844
@@ -96,9 +98,9 @@ exports.findItemsByProduct = (query) => {
     param += "&RESPONSE-DATA-FORMAT=JSON"
     param += "&REST-PAYLOAD"
     param += '&paginationInput.entriesPerPage=' + numberOfItemsOnPage
-    param += "&productId.@type=ISBN"
-    param += "&productId=" + query
-    return _fetch(param)
+    param += "&productId.@type=" + query.productIdType
+    param += "&productId=" + query.productId
+    return _fetchFindingApi(param)
 }
 
 // example command: node cli.js findItemsIneBayStores -q OfficialBestBuy
@@ -123,5 +125,5 @@ exports.findItemsIneBayStores = (query) => {
     param += '&itemFilter(1).paramValue=USD'
     param += '&paginationInput.entriesPerPage=' + numberOfItemsOnPage
     param += '&keywords='
-    return _fetch(param)
+    return _fetchFindingApi(param)
 }

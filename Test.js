@@ -70,5 +70,5 @@ var inquirer = require('inquirer');
   ];
   
   inquirer.prompt(questions).then(answers => {
-    console.log(JSON.stringify(answers, null, '  '));
+    console.log(answers);
   });

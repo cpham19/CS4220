@@ -35,6 +35,7 @@ let findCompletedItemsTable = new Table({
     head: [colors.verbose('Item#'), colors.verbose('Description')]
 
 })
+
 //findItemsAdvanced
 let findItemsAdvancedTable = new Table({
     chars: { 'top': '═' , 'top-mid': '╤' , 'top-left': '╔' , 'top-right': '╗'
@@ -44,6 +45,7 @@ let findItemsAdvancedTable = new Table({
     head: [colors.verbose('Item#'), colors.verbose('Description')]
 
 })
+
 //findItemsByCategory
 let findItemsByCategoryTable = new Table({
     chars: { 'top': '═' , 'top-mid': '╤' , 'top-left': '╔' , 'top-right': '╗'
@@ -108,14 +110,21 @@ const promptForCompletedItems = () => {
 }
 
 const promptForItemsAdvanced = () => {
-	return inquirer.prompt([{
-		type: 'input',
+	return inquirer.prompt([
+    {   type: 'input',
 		message: 'Type your keywords.',
         name: 'keywords',
         default: function() {
             return 'Pokemon';
         }
-	}])
+    },
+    {  type: 'input',
+        message: 'Type the category id #.',
+        name: 'id',
+        default: function() {
+            return '139973';
+        }   
+    }])
 }
 
 const promptForItemsByCategory = () => {
@@ -142,13 +151,15 @@ const promptForItemsByKeywords = () => {
 
 const promptForItemsByProduct = () => {
 	return inquirer.prompt([{
-		type: 'input',
-		message: 'Type your product id.',
+        type: 'list',
+		message: 'Select an option below.',
+		name: 'productIdType',
+        choices: ['ISBN', 'UPC','EAN', 'ePID',], 
+    },
+    {   type: 'input',
+        message: 'Type your product id #.',
         name: 'productId',
-        default: function() {
-            return '978-0316015844';
-        }
-	}])
+    }])
 }
 
 const promptForItemsIneBayStores = () => {
@@ -171,7 +182,7 @@ const findCompletedItems = (query) => {
 
         let counter = 1
         console.log("Completed Items for '" + query + "'")
-        console.log('----------------')
+        console.log('---------------------------------')
         searchResults.forEach(obj => {
             let objString = obj.title.toString()
            
@@ -194,8 +205,8 @@ const findItemsAdvanced = (query) => {
         //console.log(searchResults)
 
         let counter = 1
-        console.log("Items Advanced for '" + query + "'")
-        console.log('----------------')
+        console.log("Items Advanced for '" + query.keywords + "' and category id #" + query.id)
+        console.log('-------------------------------------------------------------')
         searchResults.forEach(obj => {
             let objString = obj.title.toString()
            
@@ -219,7 +230,7 @@ const findItemsByCategory = (query) => {
 
         let counter = 1
         console.log("Items Based on Category ID #" + query)
-        console.log('----------------')
+        console.log('---------------------------------')
         searchResults.forEach(obj => {
             let objString = obj.title.toString()
            
@@ -243,7 +254,7 @@ const findItemsByKeywords = (query) => {
 
         let counter = 1
         console.log("Items using '" + query + "'")
-        console.log('----------------')
+        console.log('---------------------------------')
         
       
 
@@ -273,8 +284,8 @@ const findItemsByProduct = (query) => {
         //console.log(searchResults)
 
         let counter = 1
-        console.log("Items using Product ID #'" + query + "'")
-        console.log('----------------')
+        console.log("Items using product id type '" + query.productIdType + "Product ID #'" + query.productId + "'")
+        console.log('---------------------------------')
         searchResults.forEach(obj => {
             let objString = obj.title.toString()
            
@@ -298,7 +309,7 @@ const findItemsIneBayStores = (query) => {
 
         let counter = 1
         console.log("Items in Store '" + query + "'")
-        console.log('----------------')
+        console.log('---------------------------------')
         
         searchResults.forEach(obj => {
             let objString = obj.title.toString()
@@ -322,7 +333,7 @@ const selectedOption = (answer) => {
     }
     else if (answer === 'Find Items Advanced') {
         promptForItemsAdvanced().then(answer => {
-            findItemsAdvanced(answer.keywords)
+            findItemsAdvanced(answer)
         })
     }
     else if (answer === 'Find Items By Category') {
@@ -337,7 +348,7 @@ const selectedOption = (answer) => {
     }
     else if (answer === 'Find Items By Product') {
         promptForItemsByProduct().then(answer => {
-            findItemsByProduct(answer.productId)
+            findItemsByProduct(answer)
         })
     }
     else if (answer === 'Find Items In eBay Stores') {
