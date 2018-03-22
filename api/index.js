@@ -127,3 +127,17 @@ exports.findItemsIneBayStores = (query) => {
     param += '&keywords='
     return _fetchFindingApi(param)
 }
+
+exports.getSearchKeywordsRecommendation = (query) => {
+    // Construct the request
+    // Replace MyAppID with your Production AppID
+    let param = "?OPERATION-NAME=getSearchKeywordsRecommendation"
+    param += "&SERVICE-VERSION=1.0.0"
+    param += "&SECURITY-APPNAME=" + APP_ID
+    param += "&RESPONSE-DATA-FORMAT=JSON"
+    param += "&REST-PAYLOAD"
+    const keywords = query.split(" ")
+    param += "&keywords="
+    param += keywords.join("%20")
+    return _fetchFindingApi(param)
+}

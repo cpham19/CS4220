@@ -176,103 +176,129 @@ const promptForItemsIneBayStores = () => {
 const findCompletedItems = (query) => {
     api.findCompletedItems(query).then(res => {
         let obj = JSON.parse(res.text)
-        let searchResults = obj.findCompletedItemsResponse[0].searchResult[0].item
-        // Use this console.log to see what object attributes are there
-        //console.log(searchResults)
+        let count = obj.findCompletedItemsResponse[0].searchResult[0]
+        count = count["@count"]
 
-        let counter = 1
-        console.log("Completed Items for '" + query + "'")
-        console.log('---------------------------------')
-        searchResults.forEach(obj => {
-            let objString = obj.title.toString()
-           
-            findCompletedItemsTable.push(
-            [colors.info(counter), colors.data(objString)]
-          
-            ); 
-          //  console.log(colors.info(`Item #${counter}`)+ ": " + colors.data(obj.title))
-            counter++
-        })
-        console.log(findCompletedItemsTable.toString());
+        if (count === "0") {
+            console.log("There are no item results to return.")
+        }
+        else {
+            let searchResults = obj.findCompletedItemsResponse[0].searchResult[0].item
+            // Use this console.log to see what object attributes are there
+            //console.log(searchResults)
+    
+            let counter = 1
+            console.log("Completed Items for '" + query + "'")
+            console.log('---------------------------------')
+            searchResults.forEach(obj => {
+                let objString = obj.title.toString()
+               
+                findCompletedItemsTable.push(
+                [colors.info(counter), colors.data(objString)]
+              
+                ); 
+              //  console.log(colors.info(`Item #${counter}`)+ ": " + colors.data(obj.title))
+                counter++
+            })
+            console.log(findCompletedItemsTable.toString());
+        }
     })
 }
 
 const findItemsAdvanced = (query) => {
     api.findItemsAdvanced(query).then(res => {
         let obj = JSON.parse(res.text)
-        let searchResults = obj.findItemsAdvancedResponse[0].searchResult[0].item
-        // Use this console.log to see what object attributes are there
-        //console.log(searchResults)
+        let count = obj.findItemsAdvancedResponse[0].searchResult[0]
+        count = count["@count"]
 
-        let counter = 1
-        console.log("Items Advanced for '" + query.keywords + "' and category id #" + query.id)
-        console.log('-------------------------------------------------------------')
-        searchResults.forEach(obj => {
-            let objString = obj.title.toString()
-           
-            findItemsAdvancedTable.push(
-            [colors.info(counter), colors.data(objString)]
-          
-            ); 
-         //   console.log(colors.info(`Item #${counter}`)+ ": " + colors.data(obj.title))
-            counter++
-        })
-        console.log(findItemsAdvancedTable.toString());
+        if (count === "0") {
+            console.log("There are no item results to return.")
+        }
+        else {
+            let searchResults = obj.findItemsAdvancedResponse[0].searchResult[0].item
+            // Use this console.log to see what object attributes are there
+            //console.log(searchResults)
+
+            let counter = 1
+            console.log("Items Advanced for '" + query.keywords + "' and category id #" + query.id)
+            console.log('-------------------------------------------------------------')
+            searchResults.forEach(obj => {
+                let objString = obj.title.toString()
+            
+                findItemsAdvancedTable.push(
+                [colors.info(counter), colors.data(objString)]
+            
+                ); 
+            //   console.log(colors.info(`Item #${counter}`)+ ": " + colors.data(obj.title))
+                counter++
+            })
+            console.log(findItemsAdvancedTable.toString());
+        }
     })
 }
 
 const findItemsByCategory = (query) => {
     api.findItemsByCategory(query).then(res => {
         let obj = JSON.parse(res.text)
-        let searchResults = obj.findItemsByCategoryResponse[0].searchResult[0].item
-        // Use this console.log to see what object attributes are there
-        //console.log(searchResults)
+        let ack = obj.findItemsByCategoryResponse[0].ack[0]
 
-        let counter = 1
-        console.log("Items Based on Category ID #" + query)
-        console.log('---------------------------------')
-        searchResults.forEach(obj => {
-            let objString = obj.title.toString()
-           
-            findItemsByCategoryTable.push(
-            [colors.info(counter), colors.data(objString)]
-          
-            ); 
-          //  console.log(colors.info(`Item #${counter}`)+ ": " + colors.data(obj.title))
-            counter++
-        })
-        console.log(findItemsByCategoryTable.toString());
+        if (ack === "Failure") {
+            console.log("Invalid category id.")
+        }
+        else {
+            let searchResults = obj.findItemsByCategoryResponse[0].searchResult[0].item
+            // Use this console.log to see what object attributes are there
+            //console.log(searchResults)
+
+            let counter = 1
+            console.log("Items Based on Category ID #" + query)
+            console.log('---------------------------------')
+            searchResults.forEach(obj => {
+                let objString = obj.title.toString()
+            
+                findItemsByCategoryTable.push(
+                [colors.info(counter), colors.data(objString)]
+            
+                ); 
+            //  console.log(colors.info(`Item #${counter}`)+ ": " + colors.data(obj.title))
+                counter++
+            })
+            console.log(findItemsByCategoryTable.toString());
+        }
     })
 }
 
 const findItemsByKeywords = (query) => {
     api.findItemsByKeywords(query).then(res => {
         let obj = JSON.parse(res.text)
-        let searchResults = obj.findItemsByKeywordsResponse[0].searchResult[0].item
-        // Use this console.log to see what object attributes are there
-        //console.log(searchResults)
+        let count = obj.findItemsByKeywordsResponse[0].searchResult[0]
+        count = count["@count"]
 
-        let counter = 1
-        console.log("Items using '" + query + "'")
-        console.log('---------------------------------')
+        if (count === "0") {
+            console.log("There are no item results to return.")
+        }
+        else {
+            let searchResults = obj.findItemsByKeywordsResponse[0].searchResult[0].item
+            // Use this console.log to see what object attributes are there
+            //console.log(searchResults)
+
+            let counter = 1
+            console.log("Items using '" + query + "'")
+            console.log('---------------------------------')
+
+            searchResults.forEach(obj => {
+                let objString = obj.title.toString()
+            
+            findItemsByKeywordsTable.push(
+            [colors.info(counter), colors.data(objString)]
         
-      
-
-        searchResults.forEach(obj => {
-            let objString = obj.title.toString()
-           
-    findItemsByKeywordsTable.push(
-    [colors.info(counter), colors.data(objString)]
-  
-    ); 
-         
-         //  console.log(colors.info(`Item #${counter}` + ": ") + colors.data( obj.title))
-            counter++
-        })
-        console.log(findItemsByKeywordsTable.toString());
- 
-
-      
+            ); 
+            
+            //  console.log(colors.info(`Item #${counter}` + ": ") + colors.data( obj.title))
+                counter++
+            })
+            console.log(findItemsByKeywordsTable.toString());
+        }
     })
 }
 
@@ -325,14 +351,26 @@ const findItemsIneBayStores = (query) => {
     })
 }
 
+const getSearchKeywordsRecommendation = (query)=> {
+      api.getSearchKeywordsRecommendation(query).then(res => {
+        let obj = JSON.parse(res.text)
+        let keywordResults = obj.getSearchKeywordsRecommendationResponse[0].keywords[0]
+        if (!(keywordResults === "")) {
+                console.log("Do you mean to type '" + keywordResults + "'?")
+        }
+      })
+}
+
 const selectedOption = (answer) => {
     if (answer === 'Find Completed Items') {
         promptForCompletedItems().then(answer => {
+            getSearchKeywordsRecommendation(answer.keywords)
             findCompletedItems(answer.keywords)
         })
     }
     else if (answer === 'Find Items Advanced') {
         promptForItemsAdvanced().then(answer => {
+            getSearchKeywordsRecommendation(answer.keywords)
             findItemsAdvanced(answer)
         })
     }
@@ -343,6 +381,7 @@ const selectedOption = (answer) => {
     }
     else if (answer === 'Find Items By Keywords') {
         promptForItemsByKeywords().then(answer => {
+            getSearchKeywordsRecommendation(answer.keywords)
             findItemsByKeywords(answer.keywords)
         })
     }
@@ -365,6 +404,5 @@ const start = () => {
 }
 
 module.exports = {
-    findCompletedItems, findItemsAdvanced, findItemsByCategory, 
-    findItemsByKeywords, findItemsByProduct, findItemsIneBayStores, start
+    start
 }
