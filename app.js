@@ -25,15 +25,28 @@ colors.setTheme({
 // //
 // //*********table code */
  
-
-//findCompletedItems
 let designTable = new Table({
     chars: { 'top': '═' , 'top-mid': '╤' , 'top-left': '╔' , 'top-right': '╗'
          , 'bottom': '═' , 'bottom-mid': '╧' , 'bottom-left': '╚' , 'bottom-right': '╝'
          , 'left': '║' , 'left-mid': '╟' , 'mid': '─' , 'mid-mid': '┼'
          , 'right': '║' , 'right-mid': '╢' , 'middle': '│' },
-    head: [colors.verbose('Item ID'), colors.verbose('Title'), colors.verbose('Item Condition'), colors.verbose('Shipped from'), colors.verbose("Payment Method")]
+    head: [colors.verbose('Item ID'), colors.verbose('Title'), colors.verbose('Item Condition')]
+})
 
+let designTable2 = new Table({
+    chars: { 'top': '═' , 'top-mid': '╤' , 'top-left': '╔' , 'top-right': '╗'
+         , 'bottom': '═' , 'bottom-mid': '╧' , 'bottom-left': '╚' , 'bottom-right': '╝'
+         , 'left': '║' , 'left-mid': '╟' , 'mid': '─' , 'mid-mid': '┼'
+         , 'right': '║' , 'right-mid': '╢' , 'middle': '│' },
+    head: [colors.verbose('Sold Price'), colors.verbose('Shipping price'), colors.verbose('Shipping Type'), colors.verbose('Shipped from'), colors.verbose('Ship to')]
+})
+
+let designTable3 = new Table({
+    chars: { 'top': '═' , 'top-mid': '╤' , 'top-left': '╔' , 'top-right': '╗'
+         , 'bottom': '═' , 'bottom-mid': '╧' , 'bottom-left': '╚' , 'bottom-right': '╝'
+         , 'left': '║' , 'left-mid': '╟' , 'mid': '─' , 'mid-mid': '┼'
+         , 'right': '║' , 'right-mid': '╢' , 'middle': '│' },
+    head: [colors.verbose('Category ID'), colors.verbose('Category Name')]
 })
 
 //********************* */
@@ -72,11 +85,24 @@ const promptForDetails = (searchResults) => {
 
         searchResults.forEach(listing => {
             if (listing.itemId[0] === itemId) {
-                let shortTitle = listing.title[0].substring(0, 50) + "....."
-                designTable.push(
-                [colors.info(listing.itemId[0]), colors.data(shortTitle), colors.data(listing.condition[0].conditionDisplayName[0]),colors.data(listing.location[0]), colors.data(listing.paymentMethod[0])])
-                
+                let itemId = listing.itemId[0]
+                let shortTitle = listing.title[0].substring(0, 60) + "..."
+                let condition = listing.condition[0].conditionDisplayName
+                let location = listing.location[0]
+                let soldPrice = listing.sellingStatus[0].currentPrice[0].__value__ + " " + listing.sellingStatus[0].currentPrice[0]["@currencyId"]
+                let shippingPrice = listing.shippingInfo[0].shippingServiceCost[0].__value__+ " " + listing.shippingInfo[0].shippingServiceCost[0]["@currencyId"]
+                let shippingType = listing.shippingInfo[0].shippingType[0]
+                let shipTo = listing.shippingInfo[0].shipToLocations[0]
+                let categoryId = listing.primaryCategory[0].categoryId[0]
+                let categoryName = listing.primaryCategory[0].categoryName[0]
+
+                designTable.push([colors.info(itemId), colors.data(shortTitle), colors.data(condition)])
+                designTable2.push([colors.info(soldPrice), colors.data(shippingPrice), colors.data(shippingType), colors.data(location), colors.data(shipTo)])
+                designTable3.push([colors.info(categoryId), colors.data(categoryName)])
+
                 console.log(designTable.toString())
+                console.log(designTable2.toString())
+                console.log(designTable3.toString())
             }
         })
     })
@@ -197,7 +223,7 @@ const findCompletedItems = (query) => {
         else {
             let searchResults = obj.findCompletedItemsResponse[0].searchResult[0].item
             // Use this console.log to see what object attributes are there
-            //console.log(searchResults)
+            // console.log(searchResults)
 
             promptForDetails(searchResults)
         }

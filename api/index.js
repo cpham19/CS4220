@@ -41,13 +41,13 @@ exports.findItemsAdvanced = (query) => {
     param += "&RESPONSE-DATA-FORMAT=JSON"
     param += "&REST-PAYLOAD"
     param += '&paginationInput.entriesPerPage=' + numberOfItemsOnPage
-    param += "&keywords="
     if (!(query.keywords === '')) {
+        param += "&keywords="
         const keywords = query.keywords.split(" ")
         param += keywords.join("%20")
     }
-    param += "&categoryId="
     if (!(query.id === '')) {
+        param += "&categoryId="
         param += query.id
     }
     param += "&descriptionSearch=true"
