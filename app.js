@@ -22,64 +22,17 @@ colors.setTheme({
 });
 
 
-//
-//*********table code */
+// //
+// //*********table code */
  
 
 //findCompletedItems
-let findCompletedItemsTable = new Table({
+let designTable = new Table({
     chars: { 'top': '═' , 'top-mid': '╤' , 'top-left': '╔' , 'top-right': '╗'
          , 'bottom': '═' , 'bottom-mid': '╧' , 'bottom-left': '╚' , 'bottom-right': '╝'
          , 'left': '║' , 'left-mid': '╟' , 'mid': '─' , 'mid-mid': '┼'
          , 'right': '║' , 'right-mid': '╢' , 'middle': '│' },
-    head: [colors.verbose('Item#'), colors.verbose('Description')]
-
-})
-
-//findItemsAdvanced
-let findItemsAdvancedTable = new Table({
-    chars: { 'top': '═' , 'top-mid': '╤' , 'top-left': '╔' , 'top-right': '╗'
-         , 'bottom': '═' , 'bottom-mid': '╧' , 'bottom-left': '╚' , 'bottom-right': '╝'
-         , 'left': '║' , 'left-mid': '╟' , 'mid': '─' , 'mid-mid': '┼'
-         , 'right': '║' , 'right-mid': '╢' , 'middle': '│' },
-    head: [colors.verbose('Item#'), colors.verbose('Description')]
-
-})
-
-//findItemsByCategory
-let findItemsByCategoryTable = new Table({
-    chars: { 'top': '═' , 'top-mid': '╤' , 'top-left': '╔' , 'top-right': '╗'
-         , 'bottom': '═' , 'bottom-mid': '╧' , 'bottom-left': '╚' , 'bottom-right': '╝'
-         , 'left': '║' , 'left-mid': '╟' , 'mid': '─' , 'mid-mid': '┼'
-         , 'right': '║' , 'right-mid': '╢' , 'middle': '│' },
-    head: [colors.verbose('Item#'), colors.verbose('Description')]
-
-})
-//findItemsByKeywords
-let findItemsByKeywordsTable = new Table({
-    chars: { 'top': '═' , 'top-mid': '╤' , 'top-left': '╔' , 'top-right': '╗'
-         , 'bottom': '═' , 'bottom-mid': '╧' , 'bottom-left': '╚' , 'bottom-right': '╝'
-         , 'left': '║' , 'left-mid': '╟' , 'mid': '─' , 'mid-mid': '┼'
-         , 'right': '║' , 'right-mid': '╢' , 'middle': '│' },
-    head: [colors.verbose('Item#'), colors.verbose('Description')]
-
-})
-//findItemsByProduct
-let findItemsByProductTable = new Table({
-    chars: { 'top': '═' , 'top-mid': '╤' , 'top-left': '╔' , 'top-right': '╗'
-         , 'bottom': '═' , 'bottom-mid': '╧' , 'bottom-left': '╚' , 'bottom-right': '╝'
-         , 'left': '║' , 'left-mid': '╟' , 'mid': '─' , 'mid-mid': '┼'
-         , 'right': '║' , 'right-mid': '╢' , 'middle': '│' },
-    head: [colors.verbose('Item#'), colors.verbose('Description')]
-
-})
-//findItemsIneBayStores
-let findItemsIneBayStoresTable = new Table({
-    chars: { 'top': '═' , 'top-mid': '╤' , 'top-left': '╔' , 'top-right': '╗'
-         , 'bottom': '═' , 'bottom-mid': '╧' , 'bottom-left': '╚' , 'bottom-right': '╝'
-         , 'left': '║' , 'left-mid': '╟' , 'mid': '─' , 'mid-mid': '┼'
-         , 'right': '║' , 'right-mid': '╢' , 'middle': '│' },
-    head: [colors.verbose('Item#'), colors.verbose('Description')]
+    head: [colors.verbose('Item ID'), colors.verbose('Title'), colors.verbose('Item Condition'), colors.verbose('Shipped from'), colors.verbose("Payment Method")]
 
 })
 
@@ -102,11 +55,31 @@ const promptForCompletedItems = () => {
 	return inquirer.prompt([{
 		type: 'input',
 		message: 'Type your keywords.',
-        name: 'keywords',
-        default: function() {
-            return 'Nintendo 64';
-        }
+        name: 'keywords'
 	}])
+}
+
+const promptForDetails = (searchResults) => {
+	return inquirer.prompt([{
+		type: 'list',
+		message: 'Select a listing.',
+        name: 'listing',
+        choices: searchResults.map(listing => {
+            return listing.itemId[0]
+        }),
+	}]).then(selection => {
+        let itemId = selection.listing
+
+        searchResults.forEach(listing => {
+            if (listing.itemId[0] === itemId) {
+                let shortTitle = listing.title[0].substring(0, 50) + "....."
+                designTable.push(
+                [colors.info(listing.itemId[0]), colors.data(shortTitle), colors.data(listing.condition[0].conditionDisplayName[0]),colors.data(listing.location[0]), colors.data(listing.paymentMethod[0])])
+                
+                console.log(designTable.toString())
+            }
+        })
+    })
 }
 
 const promptForItemsAdvanced = () => {
@@ -114,15 +87,17 @@ const promptForItemsAdvanced = () => {
     {   type: 'input',
 		message: 'Type your keywords.',
         name: 'keywords',
-        default: function() {
-            return 'Pokemon';
-        }
     },
     {  type: 'input',
         message: 'Type the category id #.',
         name: 'id',
-        default: function() {
-            return '139973';
+        validate: function(input) {
+            if (input.match(/^[0-9]+$/)) {
+				return true
+			}
+			else {
+				return "You have to type numbers only!"
+			}
         }   
     }])
 }
@@ -132,9 +107,14 @@ const promptForItemsByCategory = () => {
 		type: 'input',
 		message: 'Type your category id #.',
         name: 'id',
-        default: function() {
-            return '625';
-        }
+        validate: function(input) {
+            if (input.match(/^[0-9]+$/)) {
+				return true
+			}
+			else {
+				return "You have to type numbers only!"
+			}
+        }   
 	}])
 }
 
@@ -142,10 +122,7 @@ const promptForItemsByKeywords = () => {
 	return inquirer.prompt([{
 		type: 'input',
 		message: 'Type your keywords.',
-        name: 'keywords',
-        default: function() {
-            return 'GTX 1080';
-        }
+        name: 'keywords'
 	}])
 }
 
@@ -154,11 +131,46 @@ const promptForItemsByProduct = () => {
         type: 'list',
 		message: 'Select an option below.',
 		name: 'productIdType',
-        choices: ['ISBN', 'UPC','EAN', 'ePID',], 
-    },
-    {   type: 'input',
+        choices: ['ISBN', 'UPC','EAN']
+    }])
+}
+
+const promptForItemsByProduct2 = (productType) => {
+	return inquirer.prompt([{
+        type: 'input',  
         message: 'Type your product id #.',
         name: 'productId',
+        validate: function(input) {
+            if (input.match(/^[0-9]+$/)) {
+				if (productType === 'ISBN') {
+                    if (input.length !== 10 || input.length !== 13) {
+                        return true;
+                    }
+                    else {
+                        return "Please enter a 10-digit or 13-digit ISBN!"
+                    }
+                }
+                else if (productType === 'UPC') {
+                    if (input.length === 12) {
+                        return true;
+                    }
+                    else {
+                        return "Please enter a 12-digit UPC!"
+                    }
+                }
+                else if (productType === 'EAN') {
+                    if (input.length === 13) {
+                        return true;
+                    }
+                    else {
+                        return "Please enter a 13-digit EAN!"
+                    }
+                }
+			}
+			else {
+				return "You have to type numbers only!"
+			}
+        }   
     }])
 }
 
@@ -186,21 +198,8 @@ const findCompletedItems = (query) => {
             let searchResults = obj.findCompletedItemsResponse[0].searchResult[0].item
             // Use this console.log to see what object attributes are there
             //console.log(searchResults)
-    
-            let counter = 1
-            console.log("Completed Items for '" + query + "'")
-            console.log('---------------------------------')
-            searchResults.forEach(obj => {
-                let objString = obj.title.toString()
-               
-                findCompletedItemsTable.push(
-                [colors.info(counter), colors.data(objString)]
-              
-                ); 
-              //  console.log(colors.info(`Item #${counter}`)+ ": " + colors.data(obj.title))
-                counter++
-            })
-            console.log(findCompletedItemsTable.toString());
+
+            promptForDetails(searchResults)
         }
     })
 }
@@ -208,31 +207,25 @@ const findCompletedItems = (query) => {
 const findItemsAdvanced = (query) => {
     api.findItemsAdvanced(query).then(res => {
         let obj = JSON.parse(res.text)
-        let count = obj.findItemsAdvancedResponse[0].searchResult[0]
-        count = count["@count"]
+        let ack = obj.findItemsAdvancedResponse[0].ack[0]
 
-        if (count === "0") {
-            console.log("There are no item results to return.")
+        if (ack === "Failure") {
+            console.log("Invalid name or Invalid category id.")
         }
         else {
-            let searchResults = obj.findItemsAdvancedResponse[0].searchResult[0].item
-            // Use this console.log to see what object attributes are there
-            //console.log(searchResults)
+            let count = obj.findItemsAdvancedResponse[0].searchResult[0]
+            count = count["@count"]
 
-            let counter = 1
-            console.log("Items Advanced for '" + query.keywords + "' and category id #" + query.id)
-            console.log('-------------------------------------------------------------')
-            searchResults.forEach(obj => {
-                let objString = obj.title.toString()
-            
-                findItemsAdvancedTable.push(
-                [colors.info(counter), colors.data(objString)]
-            
-                ); 
-            //   console.log(colors.info(`Item #${counter}`)+ ": " + colors.data(obj.title))
-                counter++
-            })
-            console.log(findItemsAdvancedTable.toString());
+            if (count === "0") {
+                console.log("There are no item results to return.")
+            }
+            else {
+                let searchResults = obj.findItemsAdvancedResponse[0].searchResult[0].item
+                // Use this console.log to see what object attributes are there
+                //console.log(searchResults)
+    
+                promptForDetails(searchResults)
+            }
         }
     })
 }
@@ -250,20 +243,7 @@ const findItemsByCategory = (query) => {
             // Use this console.log to see what object attributes are there
             //console.log(searchResults)
 
-            let counter = 1
-            console.log("Items Based on Category ID #" + query)
-            console.log('---------------------------------')
-            searchResults.forEach(obj => {
-                let objString = obj.title.toString()
-            
-                findItemsByCategoryTable.push(
-                [colors.info(counter), colors.data(objString)]
-            
-                ); 
-            //  console.log(colors.info(`Item #${counter}`)+ ": " + colors.data(obj.title))
-                counter++
-            })
-            console.log(findItemsByCategoryTable.toString());
+            promptForDetails(searchResults)
         }
     })
 }
@@ -282,22 +262,7 @@ const findItemsByKeywords = (query) => {
             // Use this console.log to see what object attributes are there
             //console.log(searchResults)
 
-            let counter = 1
-            console.log("Items using '" + query + "'")
-            console.log('---------------------------------')
-
-            searchResults.forEach(obj => {
-                let objString = obj.title.toString()
-            
-            findItemsByKeywordsTable.push(
-            [colors.info(counter), colors.data(objString)]
-        
-            ); 
-            
-            //  console.log(colors.info(`Item #${counter}` + ": ") + colors.data( obj.title))
-                counter++
-            })
-            console.log(findItemsByKeywordsTable.toString());
+            promptForDetails(searchResults)
         }
     })
 }
@@ -305,24 +270,26 @@ const findItemsByKeywords = (query) => {
 const findItemsByProduct = (query) => {
     api.findItemsByProduct(query).then(res => {
         let obj = JSON.parse(res.text)
-        let searchResults = obj.findItemsByProductResponse[0].searchResult[0].item
-        // Use this console.log to see what object attributes are there
-        //console.log(searchResults)
+        let ack = obj.findItemsByProductResponse[0].ack[0]
 
-        let counter = 1
-        console.log("Items using product id type '" + query.productIdType + "' and Product ID #'" + query.productId + "'")
-        console.log('---------------------------------')
-        searchResults.forEach(obj => {
-            let objString = obj.title.toString()
-           
-            findItemsByProductTable.push(
-            [colors.info(counter), colors.data(objString)]
-          
-            ); 
-          //  console.log(color.info(`Item #${counter}`) + ": " +colors.data(obj.title))
-            counter++
-        })
-        console.log(findItemsByProductTable.toString());
+        if (ack === "Failure") {
+            console.log("Invalid product id.")
+        }
+        else {
+            let count = obj.findItemsByProductResponse[0].searchResult[0]
+            count = count["@count"]
+
+            if (count === "0") {
+                console.log("There are no item results to return.")
+            }
+            else {
+                let searchResults = obj.findItemsByProductResponse[0].searchResult[0].item
+                // Use this console.log to see what object attributes are there
+                //console.log(searchResults)
+
+                promptForDetails(searchResults)
+            }
+        }
     })
 }
 
@@ -333,21 +300,7 @@ const findItemsIneBayStores = (query) => {
         // Use this console.log to see what object attributes are there
         //console.log(searchResults)
 
-        let counter = 1
-        console.log("Items in Store '" + query + "'")
-        console.log('---------------------------------')
-        
-        searchResults.forEach(obj => {
-            let objString = obj.title.toString()
-           
-        findItemsIneBayStoresTable.push(
-            [colors.info(counter), colors.data(objString)]
-          
-            ); 
-           // console.log(colors.info(`Item #${counter}`)+ ": " + colors.data(obj.title))
-            counter++
-        })
-        console.log(findItemsIneBayStoresTable.toString());
+        promptForDetails(searchResults)
     })
 }
 
@@ -387,7 +340,9 @@ const selectedOption = (answer) => {
     }
     else if (answer === 'Find Items By Product') {
         promptForItemsByProduct().then(answer => {
-            findItemsByProduct(answer)
+            promptForItemsByProduct2(answer.productIdType).then(answer2 => {
+                findItemsByProduct({productIdType: answer.productIdType, productId: answer2.productId})
+            })
         })
     }
     else if (answer === 'Find Items In eBay Stores') {

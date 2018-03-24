@@ -31,7 +31,7 @@ exports.findCompletedItems = (query) => {
 }
 
 // example command: node cli.js findItemsAdvanced -q 'Pokemon'
-exports.findItemsAdvanced = (query) => {
+exports.findItemsAdvanced = (query) => {    
     // Construct the request
     // Replace MyAppID with your Production AppID
     let numberOfItemsOnPage = 20
@@ -41,10 +41,15 @@ exports.findItemsAdvanced = (query) => {
     param += "&RESPONSE-DATA-FORMAT=JSON"
     param += "&REST-PAYLOAD"
     param += '&paginationInput.entriesPerPage=' + numberOfItemsOnPage
-    const keywords = query.keywords.split(" ")
     param += "&keywords="
-    param += keywords.join("%20")
-    param += "&categoryId=" + query.id
+    if (!(query.keywords === '')) {
+        const keywords = query.keywords.split(" ")
+        param += keywords.join("%20")
+    }
+    param += "&categoryId="
+    if (!(query.id === '')) {
+        param += query.id
+    }
     param += "&descriptionSearch=true"
     return _fetchFindingApi(param)
 }
@@ -89,6 +94,7 @@ exports.findItemsByKeywords = (query) => {
 // NOTE: ISBN numbers that start with 0 such as 0316015849 will be seen as 316015849 and will give error!
 // Product types can be ISBN, UPC, EAN, or ReferenceID (productIds are corresponded to this)
 exports.findItemsByProduct = (query) => {
+    console.log(query)
     // Construct the request
     // Replace MyAppID with your Production AppID
     let numberOfItemsOnPage = 20
