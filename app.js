@@ -86,7 +86,7 @@ const promptForDetails = (searchResults) => {
         searchResults.forEach(listing => {
             if (listing.itemId[0] === itemId) {
                 let itemId = listing.itemId[0]
-                let shortTitle = listing.title[0].substring(0, 60) + "..."
+                let title = listing.title[0]
                 let condition = listing.condition[0].conditionDisplayName
                 let location = listing.location[0]
                 let listingType = listing.listingInfo[0].listingType[0]
@@ -97,7 +97,7 @@ const promptForDetails = (searchResults) => {
                 let categoryId = listing.primaryCategory[0].categoryId[0]
                 let categoryName = listing.primaryCategory[0].categoryName[0]
 
-                designTable.push([colors.info(itemId), colors.data(shortTitle), colors.data(condition)])
+                designTable.push([colors.info(itemId), colors.data(title), colors.data(condition)])
                 designTable2.push([colors.info(listingType), colors.data(soldPrice), colors.data(shippingPrice), colors.data(shippingType), colors.data(location), colors.data(shipTo)])
                 designTable3.push([colors.info(categoryId), colors.data(categoryName)])
 
