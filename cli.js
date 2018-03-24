@@ -70,9 +70,9 @@ const
     //     handler: (argv) => {app.findItemsIneBayStores(argv.query)}
     // })
     .command({
-        command: 'start',
-        desc: 'start the api',
-        handler: () => { app.start()}
+        command: 'search',
+        desc: 'search the api',
+        handler: () => { app.search()}
     })
     .help('help')
     .argv

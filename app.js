@@ -394,12 +394,12 @@ const selectedOption = (answer) => {
     }
 }
 
-const start = () => {
+const search = () => {
     mainPrompt().then(answer => {
         selectedOption(answer.feature)
     });
 }
 
 module.exports = {
-    start
+    search
 }
