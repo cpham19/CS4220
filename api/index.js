@@ -126,7 +126,7 @@ exports.findItemsIneBayStores = (query) => {
     param += '&itemFilter(0).paramName=Currency'
     param += '&itemFilter(0).paramValue=USD'
     param += '&itemFilter(1).name=MaxPrice'
-    param += '&itemFilter(1).value=25.00'
+    param += '&itemFilter(1).value=250.00'
     param += '&itemFilter(1).paramName=Currency'
     param += '&itemFilter(1).paramValue=USD'
     param += '&paginationInput.entriesPerPage=' + numberOfItemsOnPage

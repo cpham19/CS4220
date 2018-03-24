@@ -296,11 +296,26 @@ const findItemsByProduct = (query) => {
 const findItemsIneBayStores = (query) => {
     api.findItemsIneBayStores(query).then(res => {
         let obj = JSON.parse(res.text)
-        let searchResults = obj.findItemsIneBayStoresResponse[0].searchResult[0].item
-        // Use this console.log to see what object attributes are there
-        //console.log(searchResults)
+        let ack = obj.findItemsIneBayStoresResponse[0].ack[0]
 
-        promptForDetails(searchResults)
+        if (ack === "Failure") {
+            console.log("Invalid store name.")
+        }
+        else {
+            let count = obj.findItemsIneBayStoresResponse[0].searchResult[0]
+            count = count["@count"]
+
+            if (count === "0") {
+                console.log("There are no item results to return.")
+            }
+            else {
+                let searchResults = obj.findItemsIneBayStoresResponse[0].searchResult[0].item
+                // Use this console.log to see what object attributes are there
+                //console.log(searchResults)
+
+                promptForDetails(searchResults)
+            }
+        }
     })
 }
 
