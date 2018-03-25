@@ -315,13 +315,13 @@ const promptForDetails = (searchResults) => {
 		message: 'Select a listing.',
         name: 'listing',
         choices: searchResults.map(listing => {
-            return listing.itemId[0]
+            return listing.title[0]
         }),
 	}]).then(selection => {
-        let itemId = selection.listing
+        let title = selection.listing
 
         searchResults.forEach(listing => {
-            if (listing.itemId[0] === itemId) {
+            if (listing.title[0] === title) {
                 let itemId = listing.itemId[0]
                 let title = listing.title[0]
                 let condition = listing.condition[0].conditionDisplayName
@@ -339,7 +339,7 @@ const promptForDetails = (searchResults) => {
                 designTable.push([colors.info(itemId), colors.data(title), colors.data(condition)])
                 designTable2.push([colors.info(sellingState), colors.data(listingType), colors.data(sellingPrice), colors.data(shippingType), colors.data(location), colors.data(shipTo)])
                 designTable3.push([colors.info(categoryId), colors.data(categoryName)])
-
+                
                 console.log(designTable.toString())
                 console.log(designTable2.toString())
                 console.log(designTable3.toString())
