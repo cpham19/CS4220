@@ -72,46 +72,6 @@ const promptForCompletedItems = () => {
 	}])
 }
 
-const promptForDetails = (searchResults) => {
-	return inquirer.prompt([{
-		type: 'list',
-		message: 'Select a listing.',
-        name: 'listing',
-        choices: searchResults.map(listing => {
-            return listing.itemId[0]
-        }),
-	}]).then(selection => {
-        let itemId = selection.listing
-
-        searchResults.forEach(listing => {
-            if (listing.itemId[0] === itemId) {
-                console.log(listing)
-                let itemId = listing.itemId[0]
-                let title = listing.title[0]
-                let condition = listing.condition[0].conditionDisplayName
-                let location = listing.location[0]
-                let listingType = listing.listingInfo[0].listingType[0]
-                let sellingPrice = listing.sellingStatus[0].currentPrice[0].__value__ + " " + listing.sellingStatus[0].currentPrice[0]["@currencyId"]
-                let shippingType = listing.shippingInfo[0].shippingType[0]
-                let shipTo = listing.shippingInfo[0].shipToLocations[0]
-                let sellingState = listing.sellingStatus[0].sellingState[0]
-                let categoryId = listing.primaryCategory[0].categoryId[0]
-                let categoryName = listing.primaryCategory[0].categoryName[0]
-                let itemUrl = listing.viewItemURL[0]
-                console.log(itemUrl)
-
-                designTable.push([colors.info(itemId), colors.data(title), colors.data(condition)])
-                designTable2.push([colors.info(sellingState), colors.data(listingType), colors.data(sellingPrice), colors.data(shippingType), colors.data(location), colors.data(shipTo)])
-                designTable3.push([colors.info(categoryId), colors.data(categoryName)])
-
-                console.log(designTable.toString())
-                console.log(designTable2.toString())
-                console.log(designTable3.toString())
-            }
-        })
-    })
-}
-
 const promptForItemsAdvanced = () => {
 	return inquirer.prompt([
     {   type: 'input',
@@ -349,12 +309,51 @@ const findItemsIneBayStores = (query) => {
     })
 }
 
+const promptForDetails = (searchResults) => {
+	return inquirer.prompt([{
+		type: 'list',
+		message: 'Select a listing.',
+        name: 'listing',
+        choices: searchResults.map(listing => {
+            return listing.itemId[0]
+        }),
+	}]).then(selection => {
+        let itemId = selection.listing
+
+        searchResults.forEach(listing => {
+            if (listing.itemId[0] === itemId) {
+                let itemId = listing.itemId[0]
+                let title = listing.title[0]
+                let condition = listing.condition[0].conditionDisplayName
+                let location = listing.location[0]
+                let listingType = listing.listingInfo[0].listingType[0]
+                let sellingPrice = listing.sellingStatus[0].currentPrice[0].__value__ + " " + listing.sellingStatus[0].currentPrice[0]["@currencyId"]
+                let shippingType = listing.shippingInfo[0].shippingType[0]
+                let shipTo = listing.shippingInfo[0].shipToLocations[0]
+                let sellingState = listing.sellingStatus[0].sellingState[0]
+                let categoryId = listing.primaryCategory[0].categoryId[0]
+                let categoryName = listing.primaryCategory[0].categoryName[0]
+                let itemUrl = listing.viewItemURL[0]
+                console.log(itemUrl)
+
+                designTable.push([colors.info(itemId), colors.data(title), colors.data(condition)])
+                designTable2.push([colors.info(sellingState), colors.data(listingType), colors.data(sellingPrice), colors.data(shippingType), colors.data(location), colors.data(shipTo)])
+                designTable3.push([colors.info(categoryId), colors.data(categoryName)])
+
+                console.log(designTable.toString())
+                console.log(designTable2.toString())
+                console.log(designTable3.toString())
+            }
+        })
+    })
+}
+
 const getSearchKeywordsRecommendation = (query)=> {
       api.getSearchKeywordsRecommendation(query).then(res => {
         let obj = JSON.parse(res.text)
         let keywordResults = obj.getSearchKeywordsRecommendationResponse[0].keywords[0]
         if (!(keywordResults === "")) {
-                console.log("Do you mean to type '" + keywordResults + "'?")
+            console.log("Do you mean to type '" + keywordResults + "'?")
         }
       })
 }
