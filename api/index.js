@@ -94,7 +94,6 @@ exports.findItemsByKeywords = (query) => {
 // NOTE: ISBN numbers that start with 0 such as 0316015849 will be seen as 316015849 and will give error!
 // Product types can be ISBN, UPC, EAN, or ReferenceID (productIds are corresponded to this)
 exports.findItemsByProduct = (query) => {
-    console.log(query)
     // Construct the request
     // Replace MyAppID with your Production AppID
     let numberOfItemsOnPage = 20

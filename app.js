@@ -38,7 +38,7 @@ let designTable2 = new Table({
          , 'bottom': '═' , 'bottom-mid': '╧' , 'bottom-left': '╚' , 'bottom-right': '╝'
          , 'left': '║' , 'left-mid': '╟' , 'mid': '─' , 'mid-mid': '┼'
          , 'right': '║' , 'right-mid': '╢' , 'middle': '│' },
-    head: [colors.verbose('Listing type'),colors.verbose('Sold Price'), colors.verbose('Shipping price'), colors.verbose('Shipping Type'), colors.verbose('Shipped from'), colors.verbose('Ship to')]
+    head: [colors.verbose('Selling State'), colors.verbose('Listing type'),colors.verbose('Selling Price'), colors.verbose('Shipping price'), colors.verbose('Shipping Type'), colors.verbose('Shipped from'), colors.verbose('Ship to')]
 })
 
 let designTable3 = new Table({
@@ -90,15 +90,18 @@ const promptForDetails = (searchResults) => {
                 let condition = listing.condition[0].conditionDisplayName
                 let location = listing.location[0]
                 let listingType = listing.listingInfo[0].listingType[0]
-                let soldPrice = listing.sellingStatus[0].currentPrice[0].__value__ + " " + listing.sellingStatus[0].currentPrice[0]["@currencyId"]
+                let sellingPrice = listing.sellingStatus[0].currentPrice[0].__value__ + " " + listing.sellingStatus[0].currentPrice[0]["@currencyId"]
                 let shippingPrice = listing.shippingInfo[0].shippingServiceCost[0].__value__+ " " + listing.shippingInfo[0].shippingServiceCost[0]["@currencyId"]
                 let shippingType = listing.shippingInfo[0].shippingType[0]
                 let shipTo = listing.shippingInfo[0].shipToLocations[0]
+                let sellingState = listing.sellingStatus[0].sellingState[0]
                 let categoryId = listing.primaryCategory[0].categoryId[0]
                 let categoryName = listing.primaryCategory[0].categoryName[0]
+                let itemUrl = listing.viewItemURL[0]
+                console.log(itemUrl)
 
                 designTable.push([colors.info(itemId), colors.data(title), colors.data(condition)])
-                designTable2.push([colors.info(listingType), colors.data(soldPrice), colors.data(shippingPrice), colors.data(shippingType), colors.data(location), colors.data(shipTo)])
+                designTable2.push([colors.info(sellingState), colors.data(listingType), colors.data(sellingPrice), colors.data(shippingPrice), colors.data(shippingType), colors.data(location), colors.data(shipTo)])
                 designTable3.push([colors.info(categoryId), colors.data(categoryName)])
 
                 console.log(designTable.toString())
