@@ -133,7 +133,7 @@ const promptForItemsByProduct2 = (productType) => {
         validate: function(input) {
             if (input.match(/^[0-9]+$/)) {
 				if (productType === 'ISBN') {
-                    if (input.length !== 10 || input.length !== 13) {
+                    if (input.length === 10 || input.length === 13) {
                         return true;
                     }
                     else {
